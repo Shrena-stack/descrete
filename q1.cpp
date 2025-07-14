@@ -1,96 +1,91 @@
-#include<iostream>
-using namespace std;
+#include <stdio.h>
+int exists(int set[], int size, int elem);
+void display(int set[], int size);
 
-int main(){
-	int A[10],B[10],n1,n2;
-	cout<<"Enter the no.of elements of A: ";
-	cin>>n1;
-	cout<<"Enter the elements of A: "<<endl;
-	for(int i=0;i<n1;i++){
-		cin>>A[i];
-	}
-	cout<<"Enter the no.of elemets of B: ";
-	cin>>n2;
-	cout<<"Enter the elements of B:"<<endl;
-	for(int i=0;i<n2;i++){
-		cin>>B[i];
-	}
+int main() {
+    int A[50], B[50];
+    int unionset[100], intersection[50], difference[50], symmetricDiff[100];
+    int sizeA, sizeB, unionSize = 0, interSize = 0, diffSize = 0, symSize = 0;
+    int i;
 
-    // Union
-    cout << "\nUnion: ";
-    for (int i = 0; i < n1; i++) {
-        cout << A[i] << " ";
+    printf("Enter number of elements in Set A: ");
+    scanf("%d", &sizeA);
+    printf("Enter elements of Set A:\n");
+    for (i = 0; i < sizeA; i++) {
+        scanf("%d", &A[i]);
     }
-    for (int i = 0; i < n2; i++) {
-        bool found = false;
-        for (int j = 0; j < n1; j++) {
-            if (B[i] == A[j]) {
-                found = true;
-                break;
-            }
-        }
-        if (!found) {
-            cout << B[i] << " ";
+
+    printf("Enter number of elements in Set B: ");
+    scanf("%d", &sizeB);
+    printf("Enter elements of Set B:\n");
+    for (i = 0; i < sizeB; i++) {
+        scanf("%d", &B[i]);
+    }
+
+    for (i = 0; i < sizeA; i++) {
+        unionset[unionSize++] = A[i];
+    }
+    for (i = 0; i < sizeB; i++) {
+        if (!exists(A, sizeA, B[i])) {
+            unionset[unionSize++] = B[i];
         }
     }
 
-    // Intersection
-    cout << "\nIntersection: ";
-    for (int i = 0; i < n1; i++) {
-        for (int j = 0; j < n2; j++) {
-            if (A[i] == B[j]) {
-                cout << A[i] << " ";
-                break;
-            }
+    for (i = 0; i < sizeA; i++) {
+        if (exists(B, sizeB, A[i])) {
+            intersection[interSize++] = A[i];
         }
     }
 
-    // Difference A - B
-    cout << "\nDifference (A - B): ";
-    for (int i = 0; i < n1; i++) {
-        bool found = false;
-        for (int j = 0; j < n2; j++) {
-            if (A[i] == B[j]) {
-                found = true;
-                break;
-            }
-        }
-        if (!found) {
-            cout << A[i] << " ";
+    for (i = 0; i < sizeA; i++) {
+        if (!exists(B, sizeB, A[i])) {
+            difference[diffSize++] = A[i];
         }
     }
 
-    // Symmetric Difference
-    cout << "\nSymmetric Difference: ";
-    // A - B
-    for (int i = 0; i < n1; i++) {
-        bool found = false;
-        for (int j = 0; j < n2; j++) {
-            if (A[i] == B[j]) {
-                found = true;
-                break;
-            }
-        }
-        if (!found) {
-            cout << A[i] << " ";
+    for (i = 0; i < sizeA; i++) {
+        if (!exists(B, sizeB, A[i])) {
+            symmetricDiff[symSize++] = A[i];
         }
     }
-    // B - A
-    for (int i = 0; i < n2; i++) {
-        bool found = false;
-        for (int j = 0; j < n1; j++) {
-            if (B[i] == A[j]) {
-                found = true;
-                break;
-            }
-        }
-        if (!found) {
-            cout << B[i] << " ";
+    for (i = 0; i < sizeB; i++) {
+        if (!exists(A, sizeA, B[i])) {
+            symmetricDiff[symSize++] = B[i];
         }
     }
 
-    cout << endl;
+    printf("\nUnion: ");
+    display(unionset, unionSize);
+
+    printf("Intersection: ");
+    display(intersection, interSize);
+
+    printf("Difference (A - B): ");
+    display(difference, diffSize);
+
+    printf("Symmetric Difference: ");
+    display(symmetricDiff, symSize);
+
     return 0;
 }
 
+int exists(int set[], int size, int elem) {
+    int i;
+    for (i = 0; i < size; i++) {
+        if (set[i] == elem) {
+            return 1;
+        }
+    }
+    return 0;
+}
 
+void display(int set[], int size) {
+    int i;
+    printf("{ ");
+    for (i = 0; i < size; i++) {
+        printf("%d ", set[i]);
+    }
+    printf("}\n");
+}
+
+                
